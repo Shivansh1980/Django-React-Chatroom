@@ -1,1 +1,1 @@
-web: python3 manage.py runserver awesomechatroom.herokuapp.com:$PORT
+web: python3 manage.py runserver
