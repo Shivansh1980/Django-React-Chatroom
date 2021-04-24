@@ -14,9 +14,6 @@ from pathlib import Path
 import channels, os
 import dj_database_url
 
-import django
-
-
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'Chatroom.settings')
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -186,5 +183,3 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'chat/build/static/media/')
 
 prod_db = dj_database_url.config(conn_max_age=500)
 DATABASES['default'].update(prod_db)
-
-django.setup()
