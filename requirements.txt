@@ -18,3 +18,4 @@ dj_database_url==0.5.0
 daphne==3.0.2
 uvicorn==0.13.4
 uvloop==0.15.2
+psycopg2==2.8.6
