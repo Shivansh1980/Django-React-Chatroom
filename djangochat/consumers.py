@@ -124,6 +124,27 @@ class ChatConsumer(WebsocketConsumer):
                 'error':True
             }
         self.create_event('send_message_to_chat', final_content)
+    
+    def questions_list(self, data):
+        question_list = data.message
+        for question in question_list:
+            print(question, '\n\n')
+            question = str(question)
+            message = Message.objects.create(
+                username=data.username,
+                roomname=data.roomname,
+                content=question,
+                updated_content=question
+            )
+            message.save()
+        final_content = {
+            'type':'questions_list',
+            'username': data.username,
+            'roomname': data.room,
+            'message': question_list
+        }
+        self.create_event('send_message_to_chat', final_content)
+            
 
 
     def clear_room_messages(self, data):
@@ -153,7 +174,8 @@ class ChatConsumer(WebsocketConsumer):
         'new_message':new_message,
         'update_message': update_message,
         'clear_room_messages': clear_room_messages,
-        'new_file': new_file
+        'new_file': new_file,
+        'questions_list':questions_list
     }
 
     # Receive message from WebSocket

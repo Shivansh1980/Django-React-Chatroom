@@ -8,30 +8,27 @@ https://docs.djangoproject.com/en/3.1/howto/deployment/asgi/
 """
 
 # import os
-# import django
-# # from django.core.asgi import get_asgi_application
+
+# from django.core.asgi import get_asgi_application
 # from channels.routing import get_default_application
 
 # os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'Chatroom.settings')
-# django.setup()
-# # application = get_asgi_application()
-# application = get_default_application()
+
+# application = get_asgi_application()
 
 import os
-from django.core.asgi import get_asgi_application
-import django
-
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'Chatroom.settings')
-django.setup()
-from channels.auth import AuthMiddlewareStack
 from channels.routing import ProtocolTypeRouter, URLRouter
-from djangochat.routing import websocket_urlpatterns
+from django.core.asgi import get_asgi_application
+from channels.auth import AuthMiddlewareStack
+import djangochat.routing
+
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'mysite.settings')
 
 application = ProtocolTypeRouter({
     "http": get_asgi_application(),
     "websocket": AuthMiddlewareStack(
         URLRouter(
-            websocket_urlpatterns
+            djangochat.routing.websocket_urlpatterns
         )
     ),
     # Just HTTP for now. (We can add other protocols later.)

@@ -12,9 +12,7 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 
 from pathlib import Path
 import channels, os
-import dj_database_url
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'Chatroom.settings')
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -49,7 +47,6 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -76,6 +73,9 @@ TEMPLATES = [
     },
 ]
 
+WSGI_APPLICATION = 'Chatroom.wsgi.application'
+
+
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
@@ -85,17 +85,6 @@ DATABASES = {
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
-
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql',
-#         'NAME': 'd6ug859ffbr7f5',
-#         'HOST': 'ec2-34-233-0-64.compute-1.amazonaws.com',
-#         'PORT': 5432,
-#         'USER': 'lljgyfdhplamvj',
-#         'PASSWORD': '81917591bfbe1c89dcfbd37d00e1eb93e22d510034ff1a731c2c65c9ced17917'
-#     }
-# }
 
 
 # Password validation
@@ -131,6 +120,13 @@ USE_L10N = True
 USE_TZ = True
 
 
+# Static files (CSS, JavaScript, Images)
+# https://docs.djangoproject.com/en/3.1/howto/static-files/
+
+STATIC_URL = '/static/'
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'chat/build/static/'), os.path.join(BASE_DIR, 'chat/build/')]
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'chat/build/static/media/')
 
 ASGI_APPLICATION = 'Chatroom.asgi.application'
 WSGI_APPLICATION = 'Chatroom.wsgi.application'
@@ -163,23 +159,10 @@ CHANNEL_LAYERS = {
 # }
 
 CORS_ORIGIN_ALLOW_ALL = True
+WHITELIST = ['polished-morning-29118.pktriot.net']
 
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.AllowAny',
     ]
 }
-
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/3.1/howto/static-files/
-
-STATIC_URL = '/static/'
-STATICFILES_DIRS = [os.path.join(BASE_DIR, 'chat/build/static/')]
-STATIC_ROOT = os.path.join(BASE_DIR,'chat/build/collected_static_files/')
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
-
-MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'chat/build/static/media/')
-
-prod_db = dj_database_url.config(conn_max_age=500)
-DATABASES['default'].update(prod_db)
